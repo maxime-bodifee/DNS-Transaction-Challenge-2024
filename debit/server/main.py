@@ -1,8 +1,8 @@
 import time as t
 import json
 
-import server.BankAPI.dns_bank_api as bank
-import server.NetworkAPI.dns_network_api as net
+import debit.server.BankAPI.dns_bank_api as bank
+import debit.server.NetworkAPI.dns_network_api as net
 import packet_parser as pp
 import user_cache as uc
 
