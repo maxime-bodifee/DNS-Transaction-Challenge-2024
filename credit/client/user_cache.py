@@ -8,13 +8,23 @@ db_path = os.path.join(db_directory, 'user_data.db')  # Construct the path to th
 if not os.path.exists(db_directory):
     os.makedirs(db_directory)
 
-def store_user_data(user_name, user_code):
+
+def store_user_data(user_name, user_data):
     with shelve.open(db_path) as db:
-        db[user_name] = user_code
+        db[user_name] = user_data
+
 
 def retrieve_user_data(user_name):
     with shelve.open(db_path) as db:
         if user_name in db:
             return db[user_name]
+        else:
+            return None
+
+
+def retrieve_user_transactions(user_id):
+    with shelve.open(db_path) as db:
+        if user_id in db:
+            return db[user_id]
         else:
             return None
