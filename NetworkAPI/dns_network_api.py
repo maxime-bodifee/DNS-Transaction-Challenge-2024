@@ -30,20 +30,20 @@ def network_custom(custom_network_message):
 
 
 # Check how many unread packets are stored in the server
-def network_check(network_id):
+async def network_check(network_id):
     return network_custom(f"check\n{network_id}")
 
 
 # recived oldest unchecked packet
-def network_request(network_id):
+async def network_request(network_id):
     return network_custom(f"request\n{network_id}")
 
 
 # Used to check if the server is online
-def network_status():
+async def network_status():
     return network_custom("status")
 
 
 # request server time (mainly for client & server to calibrate timezone differneces)
-def network_time():
+async def network_time():
     return network_custom("time")
