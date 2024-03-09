@@ -9,31 +9,25 @@ import user_cache as uc
 NET_ID = 100
 
 
-def update_bank(account_from, account_to, secure_code, amount):
-    message = f"transfer\n{account_from}\n{secure_code}\n{amount}\n{account_to}"
-    return bank.bank_custom(message)
-
-
 def process_transaction():
     # Get the transaction from the network
     transaction = net.network_request(NET_ID)
     print(transaction)
 
-    card_data, price, vendor, time = pp.process_packet(transaction)
-    print(card_data, price, vendor, time)
+    card_data, price, vendor_bank_id, time = pp.process_packet(transaction)
+    print(card_data, price, vendor_bank_id, time)
 
     data = uc.retrieve_user_data(card_data)
     if data is not None:
-        bank_id, bank_security = json.loads(data)
-        print(bank_id, bank_security)
+        bank_id, bank_secure_code = json.loads(data)
+        print(bank_id, bank_secure_code)
 
-    # # Update the bank with the transaction details
-    # # This is a placeholder, replace it with actual update logic
-    # account_from = transaction_details["account_from"]
-    # account_to = transaction_details["account_to"]
-    # secure_code = transaction_details["secure_code"]
-    # amount = transaction_details["amount"]
-    # return update_bank(account_from, account_to, secure_code, amount)
+    else:
+        print("Card not found")
+        return
+
+    # Update the bank with the transaction details
+    bank.bank_transfer(bank_id, vendor_bank_id, bank_secure_code, price)
 
 
 def main():
