@@ -6,9 +6,11 @@ import NetworkAPI.dns_network_api as net
 
 NET_ID = 100
 
+
 def update_bank(account_from, account_to, secure_code, amount):
     message = f"transfer\n{account_from}\n{secure_code}\n{amount}\n{account_to}"
     return bank.bank_custom(message)
+
 
 def process_transactions():
     # Get the transaction from the network
@@ -32,6 +34,7 @@ def main():
         result = net.network_check(NET_ID)
         print(result)
         time.sleep(5)  # pause for 5 seconds
+
 
 # Run the main function
 if __name__ == "__main__":
