@@ -14,17 +14,20 @@ def process_transaction():
     transaction = net.network_request(NET_ID)
     print(transaction)
 
-    card_data, price, vendor_bank_id, time = pp.process_packet(transaction)
-    print(card_data, price, vendor_bank_id, time)
+    card_data, price, vendor, time = pp.process_packet(transaction)
+    print(card_data, price, vendor, time)
 
     data = uc.retrieve_user_data(card_data)
-    if data is not None:
-        bank_id, bank_secure_code = json.loads(data)
-        print(bank_id, bank_secure_code)
+    vendor_data = uc.retrieve_user_data(vendor)
 
-    else:
-        print("Card not found")
+    if data is None or vendor_data is None:
         return
+
+    bank_id, bank_secure_code = json.loads(data).values()
+    print(bank_id, bank_secure_code)
+
+    vendor_bank_id, vendor_secure_code = json.loads(vendor_data).values()
+    print(vendor_bank_id, vendor_secure_code)
 
     # Update the bank with the transaction details
     bank.bank_transfer(bank_id, vendor_bank_id, bank_secure_code, price)
@@ -34,7 +37,7 @@ def main():
     print(bank.bank_status())
     while True:
         result = net.network_check(NET_ID)
-        print(result)
+        print("\n", result, "\n")
 
         if int(result.split()[-1]) > 0:
             process_transaction()
