@@ -1,3 +1,5 @@
+import server.user_cache as uc
+import json
 
 
 def main():
@@ -7,7 +9,7 @@ def main():
     bank_code = input("What is your bank security code? ")
 
     print("Your card is being processed...")
-    # add code to file
+    uc.store_user_data(name, json.dumps({"bank_id": bank_id, "bank_code": bank_code}))
 
 
 if __name__ == '__main__':
