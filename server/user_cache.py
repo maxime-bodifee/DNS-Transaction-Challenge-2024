@@ -1,7 +1,7 @@
 import shelve
 import os
 
-db_directory = os.path.join(os.path.dirname(__file__), 'data')  # Get the directory of main.py and append 'data'
+db_directory = os.path.join(os.path.dirname(__file__), '../data')  # Append 'data' to root directory
 db_path = os.path.join(db_directory, 'user_data.db')  # Construct the path to the database file
 
 # Ensure the directory exists, create it if not

@@ -1,8 +1,10 @@
 import time as t
+import json
 
 import server.BankAPI.dns_bank_api as bank
 import server.NetworkAPI.dns_network_api as net
 import packet_parser as pp
+import user_cache as uc
 
 NET_ID = 100
 
@@ -20,11 +22,11 @@ def process_transaction():
     card_data, price, vendor, time = pp.process_packet(transaction)
     print(card_data, price, vendor, time)
 
-    # # Parse the transaction to get the necessary details
-    # transaction_details = json.loads(transaction)
-    #
-    # print(transaction_details)
-    #
+    data = uc.retrieve_user_data(card_data)
+    if data is not None:
+        bank_id, bank_security = json.loads(data)
+        print(bank_id, bank_security)
+
     # # Update the bank with the transaction details
     # # This is a placeholder, replace it with actual update logic
     # account_from = transaction_details["account_from"]
