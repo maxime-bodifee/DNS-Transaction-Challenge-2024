@@ -1,23 +1,38 @@
+import time
+import json
+
 import BankAPI.dns_bank_api as bank
 import NetworkAPI.dns_network_api as net
-import asyncio
 
 NET_ID = 100
 
-# async def process_transactions():
-#     # Get the transaction from the network
-#     transaction = await net.network_request(NET_ID)
-#
-#     # Parse the transaction to get the necessary details
-#     # This is a placeholder, replace it with actual parsing logic
-#     transaction_details = transaction.split(',')
+def update_bank(account_from, account_to, secure_code, amount):
+    message = f"transfer\n{account_from}\n{secure_code}\n{amount}\n{account_to}"
+    return bank.bank_custom(message)
+
+def process_transactions():
+    # Get the transaction from the network
+    transaction = net.network_request(NET_ID)
+
+    # Parse the transaction to get the necessary details
+    transaction_details = json.loads(transaction)
+
+    # Update the bank with the transaction details
+    # This is a placeholder, replace it with actual update logic
+    account_from = transaction_details["account_from"]
+    account_to = transaction_details["account_to"]
+    secure_code = transaction_details["secure_code"]
+    amount = transaction_details["amount"]
+    return update_bank(account_from, account_to, secure_code, amount)
 
 
-async def main():
+def main():
     print(bank.bank_status())
     while True:
-        print(await net.network_check(NET_ID))
-        await asyncio.sleep(5)  # pause for 5 seconds
+        result = net.network_check(NET_ID)
+        print(result)
+        time.sleep(5)  # pause for 5 seconds
 
 # Run the main function
-asyncio.run(main())
+if __name__ == "__main__":
+    main()
