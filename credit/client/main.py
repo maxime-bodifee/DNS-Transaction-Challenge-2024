@@ -1,4 +1,4 @@
-import util.user_cache as uc
+import credit.server.api.user_cache as uc
 import json
 
 
