@@ -1,17 +1,31 @@
-import credit.server.api.user_cache as uc
+import page
+import cherrypy
+import user_cache as uc
 import json
 
+class StringGenerator(object):
+    @cherrypy.expose
+    def index(self):
+      return page.home
 
-def main():
-    print("Welcome to LVL 100 Mafia Credit Corporation")
-    name = input("What is your username? ") + "@"
-    bank_id = input("What is your bank ID? ")
-    bank_code = input("What is your bank security code? ")
+    @cherrypy.expose
+    def signin(self):
+      return page.signin
 
-    print("Your card is being processed...")
-    uc.store_user_data(name, json.dumps({"bank_id": bank_id, "bank_code": bank_code}))
-    print(f"Account Made! Your username is: {name}")
+    @cherrypy.expose
+    def signup(self):
+      print("HI")
+      return page.signup
+
+    @cherrypy.expose
+    def authenticate(self, username):
+      return uc.retrieve_user_data(username)
+
+    @cherrypy.expose
+    def register(self, name, bank_id, bank_code):
+      uc.store_user_data(name, json.dumps({"bank_id": bank_id, "bank_code": bank_code}))
+      return "Registered"
 
 
 if __name__ == '__main__':
-    main()
+    cherrypy.quickstart(StringGenerator())
