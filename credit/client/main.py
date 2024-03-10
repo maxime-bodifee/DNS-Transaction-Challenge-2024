@@ -2,16 +2,18 @@ import page
 import cherrypy
 import user_cache as uc
 import json
-import pandas as pd
 
 
 def get_user_transactions(user):
     uid, code, points = json.loads(uc.retrieve_user_data(user)).values()
-    df = pd.DataFrame(columns=["Username", "Vendor", "Price", "Time"])
+    ret = f"<div><b>Account:</b> {user}</div><div><b>Points Balance:</b> {points}</div>"
+    owed = 0.
     for i, transaction in enumerate(uc.retrieve_user_transactions(uid)):
         username, vendor, price, time = json.loads(transaction).values()
-        df.loc[i] = [username, vendor, float(price), time]
-    return df
+        date, _ = time.split()
+        ret += f"<div><b>Vendor:</b> {vendor}, <b>Amount Paid:</b> ${float(price):.2f}, <b>Date:</b> {date}</div>"
+        owed += float(price)
+    return ret + f"<div><b>Total Owed:</b> ${owed:.2f}</div>"
 
 
 class StringGenerator(object):
@@ -30,7 +32,7 @@ class StringGenerator(object):
 
     @cherrypy.expose
     def authenticate(self, username):
-        return uc.retrieve_user_data(username) + "\n" + get_user_transactions(username).to_string()
+        return page.trans_top + get_user_transactions(username) + page.trans_bot
 
     @cherrypy.expose
     def register(self, name, bank_id, bank_code):

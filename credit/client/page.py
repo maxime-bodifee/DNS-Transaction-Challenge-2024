@@ -34,3 +34,9 @@ redir = """<html>
     <a>Redirecting</a>
   </body>
 </html>"""
+
+trans_top = """<html>
+  <head><meta http-equiv="refresh" content="delay_time; URL=new_website_url" /></head>
+  <body>"""
+trans_bot = """  </body>
+</html>"""
